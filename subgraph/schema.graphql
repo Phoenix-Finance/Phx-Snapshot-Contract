@@ -1,0 +1,93 @@
+interface Event {
+  id: ID!
+  transaction: Transaction!
+  timestamp: BigInt!
+}
+
+type Transaction @entity {
+  id: ID!
+  from: Account
+  # to:                           Account
+  # value:                        BigInt!
+  # gasUsed:                      BigInt!
+  # gasPrice:                     BigInt!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  events: [Event!]! @derivedFrom(field: "transaction")
+}
+
+# ================================= Accounts ==================================
+type Account @entity {
+  id: ID!
+  # proposals:                    [Proposals!]! @derivedFrom(field: "proposer")
+  votes: [Vote!]! @derivedFrom(field: "voter")
+  transfers: [Transfer!]! @derivedFrom(field: "from")
+  balancesHistory: [Balance!]! @derivedFrom(field: "account")
+  balancesLatest: [LatestBalance!]! @derivedFrom(field: "account")
+}
+
+type Contract @entity {
+  id: ID!
+  totalSupply: BigDecimal!
+  transfers: [Transfer!]! @derivedFrom(field: "contract")
+  balancesHistory: [Balance!]! @derivedFrom(field: "contract")
+  balancesLatest: [LatestBalance!]! @derivedFrom(field: "contract")
+}
+
+# ================================== ERC20 ====================================
+type Transfer @entity {
+  id: ID!
+  transaction: Transaction!
+  timestamp: BigInt!
+  contract: Contract!
+  from: Account!
+  to: Account!
+  value: BigDecimal!
+}
+
+type LatestBalance @entity {
+  id: ID!
+  account: Account!
+  contract: Contract!
+  balance: BigDecimal!
+  totalSupply: BigDecimal!
+  transaction: Transaction!
+  block: BigInt!
+}
+
+type Balance @entity {
+  id: ID!
+  account: Account!
+  contract: Contract!
+  balance: BigDecimal!
+  totalSupply: BigDecimal!
+  transaction: Transaction!
+  block: BigInt!
+}
+
+# ================================== Voting ===================================
+type Proposal implements Event @entity {
+  id: ID!
+  transaction: Transaction!
+  timestamp: BigInt!
+  proposer: Account!
+  link: String!
+  beginBlock: BigInt!
+  endBlock: BigInt!
+  votes: [Vote!]! @derivedFrom(field: "proposal")
+}
+
+enum Content {
+  INVALID
+  FOR
+  AGAINST
+}
+
+type Vote implements Event @entity {
+  id: ID!
+  transaction: Transaction!
+  timestamp: BigInt!
+  voter: Account!
+  proposal: Proposal!
+  content: Content!
+}

@@ -1,0 +1,76 @@
+specVersion: 0.0.2
+description: mcdexio-vote-protocol
+repository: https://github.com/mcdexio/gov-be
+schema:
+  file: ./schema.graphql
+dataSources:
+  - name: MCB
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      address: '0x4e352cF164E64ADCBad318C3a1e222E9EBa4Ce42'
+      abi: IERC20
+      startBlock: 10391739
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Account
+        - Balance
+        - Transfer
+      abis:
+        - name: IERC20
+          file: abi/IERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/ERC20.ts
+
+  - name: UniswapMCBETH
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      address: '0x10cfa744c77F1cB9A77fa418ac4a1B6ec62BcCE4'
+      abi: IERC20
+      startBlock: 10418546
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Account
+        - Balance
+        - Transfer
+      abis:
+        - name: IERC20
+          file: abi/IERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/ERC20.ts
+
+  - name: VoteBox
+    kind: ethereum/contract
+    network: mainnet
+    source:
+      address: '0xb44a29b5fb1f6dc5730d721a2c12898e1e6c6c31'
+      abi: VoteBox
+      startBlock: 10683796
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Account
+        - Porposal
+        - Vote
+      abis:
+        - name: VoteBox
+          file: abi/VoteBox.json
+      eventHandlers:
+        - event: Proposal(indexed uint256,string,uint256,uint256)
+          handler: handleProposal
+        - event: Vote(indexed address,indexed uint256,uint8)
+          handler: handleVote
+      file: ./src/VoteBox.ts

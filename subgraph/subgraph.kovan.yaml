@@ -1,0 +1,76 @@
+specVersion: 0.0.2
+description: mcdexio-vote-protocol
+repository: https://github.com/mcdexio/vote-protocol-subgraph
+schema:
+  file: ./schema.graphql
+dataSources:
+  - name: MCB
+    kind: ethereum/contract
+    network: kovan
+    source:
+      address: '0xcb263ab066d982b285d20cec20153d1923e6969d'
+      abi: IERC20
+      startBlock: 20167580
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Account
+        - Balance
+        - Transfer
+      abis:
+        - name: IERC20
+          file: abi/IERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/ERC20.ts
+
+  - name: UniswapMCBETH
+    kind: ethereum/contract
+    network: kovan
+    source:
+      address: '0x4fb542b239cddca757828ddee53487739f1bcdef'
+      abi: IERC20
+      startBlock: 20167580
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Account
+        - Balance
+        - Transfer
+      abis:
+        - name: IERC20
+          file: abi/IERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/ERC20.ts
+
+  - name: VoteBox
+    kind: ethereum/contract
+    network: kovan
+    source:
+      address: '0x66B16B80f09cb80a476f74dEF7315B39Ad53eF8F'
+      abi: VoteBox
+      startBlock: 20167580
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - Account
+        - Porposal
+        - Vote
+      abis:
+        - name: VoteBox
+          file: abi/VoteBox.json
+      eventHandlers:
+        - event: Proposal(indexed uint256,string,uint256,uint256)
+          handler: handleProposal
+        - event: Vote(indexed address,indexed uint256,uint8)
+          handler: handleVote
+      file: ./src/VoteBox.ts
