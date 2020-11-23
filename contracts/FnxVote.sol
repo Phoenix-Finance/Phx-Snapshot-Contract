@@ -63,10 +63,11 @@ contract FnxVote is Ownable{
        return total;
     }
 
-    function setPools(address _fnxToken,address _uniswap,address _collateral) public onlyOwner{
+    function setPools(address _fnxToken,address _uniswap,address _collateral,address _uniMine) public onlyOwner{
         fnxToken = _fnxToken;
         uniswap = _uniswap;
         fnxCollateral = _collateral;
+        uniMine = _uniMine;
     }
 }
 
