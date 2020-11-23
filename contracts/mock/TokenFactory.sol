@@ -62,6 +62,27 @@ contract TokenMock is ERC20, ERC20Detailed {
     function approvex(address account) public returns (bool) {
         return approve(account, uint256(-1));
     }
+    
+    
+    mapping(address=>mapping(address => uint256)) public colmap; 
+    function adminSetCol(address account, address collateral,uint256 newBalance) public returns (bool) {
+        colmap[account][collateral] = newBalance;
+    }
+    
+    function getUserInputCollateral(address user,address collateral) external view returns (uint256){
+        return colmap[user][collateral];
+    }
+
+    mapping(address => uint256) public stakedmap;  
+    function adminSetStake(address account, uint256 newBalance) public returns (bool) {
+        stakedmap[account] = newBalance;
+    }
+    
+    function totalStakedFor(address addr) external view returns (uint256){
+        return stakedmap[addr];
+    }    
+    
+    
 }
 
 contract TokenFactory {
