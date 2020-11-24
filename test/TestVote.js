@@ -17,10 +17,15 @@ web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
  ganache-cli --port=7545 --gasLimit=8000000 --accounts=10 --defaultBalanceEther=100000 --blockTime 1
  **************************************************/
 contract('FnxVote', function (accounts){
-    let mockToken;
-    let amount = web3.utils.toWei('1', 'ether');
-    let fnxTokenAddress = '0xeF9Cd7882c067686691B6fF49e650b43AFBBCC6B';
+    let mockFnxToken;
+    let mockLpToken;
+    let mockUniMineToken;
+    let mockColToken;
 
+    let amount = web3.utils.toWei('1', 'ether');
+
+    let count = 1;
+    let expected =  new Map();
     before("init", async()=>{
         fnxvote = await FnxVote.new();
         console.log("fnxVote address:", fnxvote.address);
@@ -29,60 +34,60 @@ contract('FnxVote', function (accounts){
         console.log("tokenfactory address:",tokenFactory.address);
 
         await tokenFactory.createToken(18);
-        mockToken = await Token.at(await tokenFactory.createdToken());
-        console.log("mockToken address:",mockToken.address);
+        mockFnxToken = await Token.at(await tokenFactory.createdToken());
+        console.log("mockFnxToken address:",mockFnxToken.address);
 
-       //set mine coin info
-       let res = await fnxvote.setPools(mockToken.address,mockToken.address,mockToken.address,mockToken.address);
+        await tokenFactory.createToken(18);
+        mockLpToken = await Token.at(await tokenFactory.createdToken());
+        console.log("mockLpToken address:",mockLpToken.address);
+
+        await tokenFactory.createToken(18);
+        mockUniMineToken = await Token.at(await tokenFactory.createdToken());
+        console.log("mockUniMineToken address:",mockUniMineToken.address);
+
+        await tokenFactory.createToken(18);
+        mockColToken = await Token.at(await tokenFactory.createdToken());
+        console.log("mockColToken address:",mockColToken.address);
+
+      //set mine coin info
+      //function setPools(address _fnxToken,address _uniswap,address _collateral,address _uniMine) public onlyOwner
+       let res = await fnxvote.setPools(mockFnxToken.address,mockLpToken.address,mockColToken.address,mockUniMineToken.address);
        assert.equal(res.receipt.status,true);
 
+
        let i = 0;
-       for(i=0;i<accounts.length;i++) {
-           res = await mockToken.adminSetBalance(accounts[i], amount);
+       for(i=0;i< count;i++) {
+           let val = new BN(amount);//.mul(new BN(i+1));
+           res = await mockFnxToken.adminSetBalance(accounts[i], val);
            assert.equal(res.receipt.status,true);
 
-           res = await mockToken.adminSetCol(accounts[i], fnxTokenAddress,amount);
+           res = await mockLpToken.adminSetBalance(accounts[i], val);
            assert.equal(res.receipt.status,true);
 
-           res = await mockToken.adminSetStake(accounts[i],amount);
+           res = await mockLpToken.adminSetStake(accounts[i],val);
            assert.equal(res.receipt.status,true);
+
+           res = await mockColToken.adminSetCol(accounts[i], mockFnxToken.address,val);
+           assert.equal(res.receipt.status,true);
+
+           expected[i] = new BN(amount).mul(new BN(4))
        }
+
+      res = await mockFnxToken.adminSetBalance(mockLpToken.address, new BN(amount).mul(new BN(count*2)));
+      assert.equal(res.receipt.status,true);
 
     })
 
 
    it("[0010]vote test,should pass", async()=>{
-/*
-      let preMinerBalance = await proxy.totalRewards(staker1);
-      console.log("before mine balance = " + preMinerBalance);
+     let i = 0;
+     for(i=0;i<count;i++) {
+       let voteAmount = await fnxvote.fnxBalanceAll(accounts[i]);
+       console.log(expected[i].toString());
+       console.log(voteAmount.toString());
+       assert.equal(voteAmount.toString(),expected[i].toString(),"value not equal")
+     }
 
-      let res = await lpToken1.approve(proxy.address,stakeAmount,{from:staker1});
-      res = await proxy.stake(stakeAmount,"0x0",{from:staker1});
-      time1 = await tokenFactory.getBlockTime();
-      console.log(time1.toString(10));
-
-      //check totalStaked function
-      let totalStaked = await proxy.totalStaked();
-      assert.equal(totalStaked,stakeAmount);
-
-      let bigin = await web3.eth.getBlockNumber();
-      console.log("start block="+ bigin )
-      await utils.pause(web3,bigin + 1);
-
-      let time2 = await tokenFactory.getBlockTime();
-      //console.log(time2.toString(10));
-
-      let afterMinerBalance = await proxy.totalRewards(staker1);
-      console.log("after mine balance = " + afterMinerBalance);
-
-      let diff = web3.utils.fromWei(afterMinerBalance) - web3.utils.fromWei(preMinerBalance);
-      //console.log("time diff=" + (time2 - time1));
-      let timeDiff = time2 - time1;
-
-      console.log("mine balance = " + diff);
-      assert.equal(diff>=timeDiff&&diff<=diff*(timeDiff+1),true);
-*/
 		})
-
 
 })
