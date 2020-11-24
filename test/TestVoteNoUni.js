@@ -25,6 +25,7 @@ contract('FnxVote', function (accounts){
     let amount = web3.utils.toWei('1', 'ether');
 
     before("init", async()=>{
+
         fnxvote = await FnxVote.new();
         console.log("fnxVote address:", fnxvote.address);
 
@@ -53,24 +54,22 @@ contract('FnxVote', function (accounts){
        assert.equal(res.receipt.status,true);
 
 
-
     })
 
 
-   it("[0010]vote from all of pools,should pass", async()=>{
-     let count = 1;
+   it("[0010]vote without uni,should pass", async()=>{
+     let count = 2;
      let expected =  new Map();
 
      let i = 0;
-     for(i=0;i< count;i++) {
-       let val = new BN(amount);//.mul(new BN(i+1));
+     let val = new BN(amount);//.mul(new BN(i+1));
+     for(i=1;i< count;i++) {
+
        res = await mockFnxToken.adminSetBalance(accounts[i], val);
        assert.equal(res.receipt.status,true);
 
-       res = await mockLpToken.adminSetBalance(accounts[i], val);
-       assert.equal(res.receipt.status,true);
 
-       res = await mockLpToken.adminSetStake(accounts[i],val);
+       res = await mockUniMineToken.adminSetStake(accounts[i],val);
        assert.equal(res.receipt.status,true);
 
        res = await mockColToken.adminSetCol(accounts[i], mockFnxToken.address,val);
@@ -79,48 +78,18 @@ contract('FnxVote', function (accounts){
        expected[i] = new BN(amount).mul(new BN(4))
      }
 
-     res = await mockFnxToken.adminSetBalance(mockLpToken.address, new BN(amount).mul(new BN(count*2)));
+     res = await mockLpToken.adminSetBalance(accounts[0], val);
+     assert.equal(res.receipt.status,true);
+     // 1 lp == 2 fnx
+     res = await mockFnxToken.adminSetBalance(mockLpToken.address, new BN(amount).mul(new BN(2)));
      assert.equal(res.receipt.status,true);
 
-     for(i=0;i<count;i++) {
+     for(i=1;i<count;i++) {
        let voteAmount = await fnxvote.fnxBalanceAll(accounts[i]);
        console.log(expected[i].toString());
        console.log(voteAmount.toString());
        assert.equal(voteAmount.toString(),expected[i].toString(),"value not equal")
      }
-
 		})
-
-
-  it("[0010]vote from 3 pools,without unimine,should pass", async()=>{
-    let count = 1;
-    let expected =  new Map();
-
-    let i = 0;
-    for(i=0;i< count;i++) {
-      let val = new BN(amount);//.mul(new BN(i+1));
-      res = await mockFnxToken.adminSetBalance(accounts[i], val);
-      assert.equal(res.receipt.status,true);
-
-      res = await mockLpToken.adminSetBalance(accounts[i], val);
-      assert.equal(res.receipt.status,true);
-
-      res = await mockColToken.adminSetCol(accounts[i], mockFnxToken.address,val);
-      assert.equal(res.receipt.status,true);
-
-      expected[i] = new BN(amount).mul(new BN(4))
-    }
-    // 1 lp = 2 fnx
-    res = await mockFnxToken.adminSetBalance(mockLpToken.address, new BN(amount).mul(new BN(count*2)));
-    assert.equal(res.receipt.status,true);
-
-    for(i=0;i<count;i++) {
-      let voteAmount = await fnxvote.fnxBalanceAll(accounts[i]);
-      console.log(expected[i].toString());
-      console.log(voteAmount.toString());
-      assert.equal(voteAmount.toString(),expected[i].toString(),"value not equal")
-    }
-
-  })
 
 })

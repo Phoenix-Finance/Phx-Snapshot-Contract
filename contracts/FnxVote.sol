@@ -30,15 +30,14 @@ contract FnxVote is Ownable{
         if (LpFnxBalance == 0) {
             return 0;
         }
-        
-        uint256 fnxPerUni = LpFnxBalance.mul(1e12).div(IERC20(uniswap).totalSupply());
-        
-        uint256 userLpBalance = IERC20(uniswap).balanceOf(_user);
-        if (userLpBalance == 0) {
+        if(IERC20(uniswap).totalSupply()==0) {
             return 0;
         }
         
+        uint256 fnxPerUni = LpFnxBalance.mul(1e12).div(IERC20(uniswap).totalSupply());
+
         uint256 userUnimineLpBalance = IUniMinePool(uniMine).totalStakedFor(_user);
+        uint256 userLpBalance = IERC20(uniswap).balanceOf(_user);
 
         return (userLpBalance.add(userUnimineLpBalance)).mul(fnxPerUni).div(1e12);
     }
