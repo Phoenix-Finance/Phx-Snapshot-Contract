@@ -81,9 +81,7 @@ contract TokenMock is ERC20, ERC20Detailed {
     function totalStakedFor(address addr) external view returns (uint256){
         return stakedmap[addr];
     }    
-    
-    
-}
+ }
 
 contract TokenFactory {
     address public createdToken;
