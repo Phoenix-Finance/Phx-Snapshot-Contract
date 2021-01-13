@@ -1,5 +1,6 @@
 const FnxVoteProxy = artifacts.require('FnxVoteProxy');
 const FnxVote = artifacts.require('FnxVote');
+const FnxVoteTest = artifacts.require('FnxVoteTest');
 const MockTokenFactory = artifacts.require('TokenFactory');
 const Token = artifacts.require("TokenMock");
 
@@ -134,7 +135,6 @@ contract('FnxVoteProxy', function (accounts){
 		})
 
   it("[0020]added sushimine test,should pass", async()=>{
-
     let i = 0;
 
     let val = new BN(amount);//.mul(new BN(i+1));
@@ -160,7 +160,21 @@ contract('FnxVoteProxy', function (accounts){
 
     let voteAmount = await fnxvote.fnxBalanceAll(accounts[0]);
     console.log("fnx total=" + Web3.utils.fromWei(voteAmount));
-
   })
 
+  it("[0030] changed logic contract,should pass", async()=>{
+
+    newFnxvote = await FnxVoteTest.new();
+    console.log("fnxVote address:", fnxvote.address);
+
+    let res = await fnxvoteproxy.setLogicContract(newFnxvote.address);
+    assert.equal(res.receipt.status,true);
+
+    fnxvote = await FnxVoteTest.at(fnxvoteproxy.address);
+    let version = await fnxvote.getVersion();
+    console.log("new version=" + version);
+
+    assert.equal(version,2);
+
+  })
 })
