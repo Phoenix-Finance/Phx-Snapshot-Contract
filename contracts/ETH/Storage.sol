@@ -12,6 +12,4 @@ contract Storage {
     address public temp1 =  address(0x0);
     address public temp2 =  address(0x0);
     address public temp3 =  address(0x0);
-    
-    uint256 public version = 1;
 }

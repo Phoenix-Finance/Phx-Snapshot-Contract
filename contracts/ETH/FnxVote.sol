@@ -97,12 +97,9 @@ contract FnxVote is Storage,Ownable {
         sushimine = _sushimine;
     }
     
-    function setVersion(uint256 _version) public onlyOwner {
-        version = _version;
-    }
-    
-    function getVersion() public view returns (uint256)  {
-        return version;
+
+    function getVersion() public pure returns (uint256)  {
+        return 1;
     }
     
     
