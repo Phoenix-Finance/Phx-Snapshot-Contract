@@ -30,6 +30,10 @@ contract FnxVoteWan is Storage,Ownable{
         uint256 total = 0;
         
         for(;i<wanswap.length;i++) {
+            if(wanswapDisable[wanswap[i]]) {
+                continue;
+            }
+            
             uint256 LpFnxBalance = IERC20(fnxToken).balanceOf(wanswap[i]);
             if (LpFnxBalance == 0) {
                 return 0;
@@ -65,11 +69,16 @@ contract FnxVoteWan is Storage,Ownable{
         fnxCollateral = _collateral;
     } 
     
-     function setWanswap(address[] memory _wanswap) public onlyOwner{
+    function setWanswap(address[] memory _wanswap) public onlyOwner{
         wanswap.length = 0;
         for(uint256 i=0;i<_wanswap.length;i++) {
             wanswap.push(_wanswap[i]);
         }
-    }    
+    } 
+    
+    function disableWanSwap(address _wanswap) public onlyOwner{
+        wanswapDisable[_wanswap] = true;
+    }
+    
     
 }

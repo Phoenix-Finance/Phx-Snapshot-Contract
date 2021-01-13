@@ -15,4 +15,5 @@ contract Storage {
         0xC611EE52788d66312F3eA83d9ae96B693a611Ee8 //FNX/ETH   
     ];
     
+    mapping (address => bool) public wanswapDisable;
 }

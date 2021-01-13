@@ -23,39 +23,54 @@ contract FnxVote is Storage,Ownable {
     }
 
     function fnxBalanceInUniswap(address _user) public view returns (uint256) {
-        uint256 LpFnxBalance = IERC20(fnxToken).balanceOf(uniswap);
-        if (LpFnxBalance == 0) {
-            return 0;
+        uint256 total = 0;
+        for(uint256 i=0;i<uniswap.length;i++){
+            if(uniswapDisable[sushiswap[i]]) {
+                continue;
+            }
+            
+            uint256 LpFnxBalance = IERC20(fnxToken).balanceOf(uniswap[i]);
+            if (LpFnxBalance == 0) {
+                continue;
+            }
+            if(IERC20(uniswap[i]).totalSupply()==0) {
+                continue;
+            }
+            
+            uint256 fnxPerUni = LpFnxBalance.mul(1e12).div(IERC20(uniswap[i]).totalSupply());
+    
+            uint256 userUnimineLpBalance = IUniMinePool(uniMine[i]).totalStakedFor(_user);
+            uint256 userLpBalance = IERC20(uniswap[i]).balanceOf(_user);
+    
+            total = total.add((userLpBalance.add(userUnimineLpBalance)).mul(fnxPerUni).div(1e12));
         }
-        if(IERC20(uniswap).totalSupply()==0) {
-            return 0;
-        }
-        
-        uint256 fnxPerUni = LpFnxBalance.mul(1e12).div(IERC20(uniswap).totalSupply());
-
-        uint256 userUnimineLpBalance = IUniMinePool(uniMine).totalStakedFor(_user);
-        uint256 userLpBalance = IERC20(uniswap).balanceOf(_user);
-
-        return (userLpBalance.add(userUnimineLpBalance)).mul(fnxPerUni).div(1e12);
     }
     
     function fnxBalanceInSushiSwap(address _user) public view returns (uint256) {
-        uint256 LpFnxBalance = IERC20(fnxToken).balanceOf(sushiswap);
-        if (LpFnxBalance == 0) {
-            return 0;
-        }
-        if(IERC20(sushiswap).totalSupply()==0) {
-            return 0;
-        }
-        
-        uint256 fnxPerUni = LpFnxBalance.mul(1e12).div(IERC20(sushiswap).totalSupply());
-        if(sushimine!=address(0)) {
-            uint256 userUnimineLpBalance = IUniMinePool(sushimine).totalStakedFor(_user);
-            uint256 userLpBalance = IERC20(sushiswap).balanceOf(_user);
-            return (userLpBalance.add(userUnimineLpBalance)).mul(fnxPerUni).div(1e12);
-        } else {
-            uint256 userLpBalance = IERC20(sushiswap).balanceOf(_user);
-            return userLpBalance.mul(fnxPerUni).div(1e12);
+        uint256 total = 0;
+        for(uint256 i=0;i<uniswap.length;i++){    
+            
+            if(sushiswapDisable[sushiswap[i]]) {
+                continue;
+            }
+            
+            uint256 LpFnxBalance = IERC20(fnxToken).balanceOf(sushiswap[i]);
+            if (LpFnxBalance == 0) {
+                continue;
+            }
+            if(IERC20(sushiswap[i]).totalSupply()==0) {
+                continue;
+            }
+            
+            uint256 fnxPerUni = LpFnxBalance.mul(1e12).div(IERC20(sushiswap[i]).totalSupply());
+            if(sushimine[i]!=address(0)) {
+                uint256 userUnimineLpBalance = IUniMinePool(sushimine[i]).totalStakedFor(_user);
+                uint256 userLpBalance = IERC20(sushiswap[i]).balanceOf(_user);
+                total = total.add((userLpBalance.add(userUnimineLpBalance)).mul(fnxPerUni).div(1e12));
+            } else {
+                uint256 userLpBalance = IERC20(sushiswap[i]).balanceOf(_user);
+                total = total.add(userLpBalance.mul(fnxPerUni).div(1e12));
+            }
         }
     }    
 
@@ -77,26 +92,28 @@ contract FnxVote is Storage,Ownable {
         fnxToken = _fnxToken;
     }
     
-    function setUniswap(address _uniswap) public onlyOwner{
-        uniswap = _uniswap;
-    }
-    
+
     function setOptionCol(address _collateral)  public onlyOwner{
         fnxCollateral = _collateral;
     }
         
-    function setUniMine(address _uniMine) public onlyOwner{
-        uniMine = _uniMine;
+    function setUniswap(address _uniswap,address _uniMine) public onlyOwner{
+        uniswap.push(_uniswap);
+        uniMine.push(_uniMine);
+    }
+
+    function disableUniswap(address _uniswap) public onlyOwner{
+        uniswapDisable[_uniswap] = true;      
+    }
+
+    function setSushiSwap(address _sushiswap,address _sushimine) public onlyOwner{
+        sushiswap.push(_sushiswap);
+        sushimine.push(_sushimine);
     }
     
-    function setSushiSwap(address _sushiswap) public onlyOwner{
-        sushiswap = _sushiswap;
+    function disableSushiSwap(address _sushiswap)  public onlyOwner{
+        sushiswapDisable[_sushiswap] = true;
     }
-    
-    function setSushiMine(address _sushimine) public onlyOwner{
-        sushimine = _sushimine;
-    }
-    
 
     function getVersion() public pure returns (uint256)  {
         return 1;
