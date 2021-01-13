@@ -11,7 +11,7 @@ const BN = require("bn.js");
 var utils = require('./utils.js');
 
 web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
-
+let address0 =  "0x0000000000000000000000000000000000000000";
 
 /**************************************************
  test case only for the ganahce command
@@ -66,19 +66,19 @@ contract('FnxVoteProxy', function (accounts){
 //////////////////////////////////////////////////////////////////////
        fnxvote = await FnxVote.at(fnxvoteproxy.address);
 
+       res = await fnxvote.removeAll();
+       assert.equal(res.receipt.status,true);
+
        res = await fnxvote.setFnx(mockFnxToken.address);
        assert.equal(res.receipt.status,true);
 
-        res = await fnxvote.setUniswap(mockLpToken.address);
+        res = await fnxvote.setUniswap(mockLpToken.address,mockUniMineToken.address);
         assert.equal(res.receipt.status,true);
 
         res = await fnxvote.setOptionCol(mockColToken.address);
         assert.equal(res.receipt.status,true);
 
-        res = await fnxvote.setUniMine(mockUniMineToken.address);
-        assert.equal(res.receipt.status,true);
-
-        res = await fnxvote.setSushiSwap(mockSushiLpToken.address);
+        res = await fnxvote.setSushiSwap(mockSushiLpToken.address,address0);
         assert.equal(res.receipt.status,true);
 
     })
@@ -139,8 +139,15 @@ contract('FnxVoteProxy', function (accounts){
 
     let val = new BN(amount);//.mul(new BN(i+1));
 
-    res = await fnxvote.setSushiMine(mockSushimineLpToken.address);
+    res = await fnxvote.removeAll();
     assert.equal(res.receipt.status,true);
+
+    res = await fnxvote.setUniswap(mockLpToken.address,mockUniMineToken.address);
+    assert.equal(res.receipt.status,true);
+
+    res = await fnxvote.setSushiSwap(mockSushiLpToken.address,mockSushimineLpToken.address);
+    assert.equal(res.receipt.status,true);
+
 
     //sushi swap lp balance
     res = await mockSushimineLpToken.adminSetStake(accounts[0],val);
