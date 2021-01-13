@@ -4,6 +4,7 @@ pragma solidity =0.5.16;
 import "./SafeMath.sol";
 import "./Storage.sol";
 import "./IERC20.sol";
+import "./Ownable.sol";
 
 interface ICollateralPool {
      function getUserInputCollateral(address user,address collateral) external view returns (uint256);
@@ -13,7 +14,7 @@ interface IUniMinePool {
      function totalStakedFor(address addr) external view returns (uint256);
 }
 
-contract FnxVoteWan is Storage{
+contract FnxVoteWan is Storage,Ownable{
     using SafeMath for uint256;
 
     function fnxTokenBalance(address _user) public view returns (uint256) {

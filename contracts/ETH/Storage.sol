@@ -2,7 +2,7 @@ pragma solidity =0.5.16;
 
 import "./Ownable.sol";
 
-contract Storage is Ownable{
+contract Storage {
     address public fnxToken = 0xeF9Cd7882c067686691B6fF49e650b43AFBBCC6B;
     address public uniswap = 0x722885caB8be10B27F359Fcb225808fe2Af07B16;
     address public fnxCollateral = 0x919a35A4F40c479B3319E3c3A2484893c06fd7de;

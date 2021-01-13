@@ -3,7 +3,7 @@ pragma solidity =0.5.16;
 import './Ownable.sol';
 import './Storage.sol';
 
-contract FnxVoteProxy is Storage {
+contract FnxVoteProxy is Storage,Ownable {
 
     address public logic_contract;
 
