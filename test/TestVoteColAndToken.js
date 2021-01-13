@@ -50,8 +50,17 @@ contract('FnxVote', function (accounts){
 
       //set mine coin info
       //function setPools(address _fnxToken,address _uniswap,address _collateral,address _uniMine) public onlyOwner
-       let res = await fnxvote.setPools(mockFnxToken.address,mockLpToken.address,mockColToken.address,mockUniMineToken.address);
-       assert.equal(res.receipt.status,true);
+      res = await fnxvote.setFnx(mockFnxToken.address);
+      assert.equal(res.receipt.status,true);
+
+      res = await fnxvote.setUniswap(mockLpToken.address);
+      assert.equal(res.receipt.status,true);
+
+      res = await fnxvote.setOptionCol(mockColToken.address);
+      assert.equal(res.receipt.status,true);
+
+      res = await fnxvote.setUniMine(mockUniMineToken.address);
+      assert.equal(res.receipt.status,true);
 
 
     })
