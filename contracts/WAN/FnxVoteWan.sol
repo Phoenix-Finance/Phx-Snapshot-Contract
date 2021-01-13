@@ -69,11 +69,8 @@ contract FnxVoteWan is Storage,Ownable{
         fnxCollateral = _collateral;
     } 
     
-    function setWanswap(address[] memory _wanswap) public onlyOwner{
-        wanswap.length = 0;
-        for(uint256 i=0;i<_wanswap.length;i++) {
-            wanswap.push(_wanswap[i]);
-        }
+    function setWanswap(address _wanswap) public onlyOwner{
+        wanswap.push(_wanswap);
     } 
     
     function disableWanSwap(address _wanswap) public onlyOwner{
