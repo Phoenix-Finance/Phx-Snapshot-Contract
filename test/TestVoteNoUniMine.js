@@ -49,17 +49,19 @@ contract('FnxVote', function (accounts){
         console.log("mockColToken address:",mockColToken.address);
 
       //set mine coin info
-      //function setPools(address _fnxToken,address _uniswap,address _collateral,address _uniMine) public onlyOwner
+      res = await fnxvote.removeAll();
+      assert.equal(res.receipt.status,true);
+
       res = await fnxvote.setFnx(mockFnxToken.address);
       assert.equal(res.receipt.status,true);
 
-      res = await fnxvote.setUniswap(mockLpToken.address);
+      res = await fnxvote.setUniswap(mockLpToken.address,mockUniMineToken.address);
       assert.equal(res.receipt.status,true);
 
       res = await fnxvote.setOptionCol(mockColToken.address);
       assert.equal(res.receipt.status,true);
 
-      res = await fnxvote.setUniMine(mockUniMineToken.address);
+      res = await fnxvote.setSushiSwap(mockSushiLpToken.address,address0);
       assert.equal(res.receipt.status,true);
 
 
