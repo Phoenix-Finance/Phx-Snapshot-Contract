@@ -40,21 +40,21 @@ contract FnxVote is Storage,Ownable {
     }
     
     function fnxBalanceInSushiSwap(address _user) public view returns (uint256) {
-        uint256 LpFnxBalance = IERC20(fnxToken).balanceOf(uniswap);
+        uint256 LpFnxBalance = IERC20(fnxToken).balanceOf(sushiswap);
         if (LpFnxBalance == 0) {
             return 0;
         }
-        if(IERC20(uniswap).totalSupply()==0) {
+        if(IERC20(sushiswap).totalSupply()==0) {
             return 0;
         }
         
-        uint256 fnxPerUni = LpFnxBalance.mul(1e12).div(IERC20(uniswap).totalSupply());
-        if(uniMine!=address(0)) {
-            uint256 userUnimineLpBalance = IUniMinePool(uniMine).totalStakedFor(_user);
-            uint256 userLpBalance = IERC20(uniswap).balanceOf(_user);
+        uint256 fnxPerUni = LpFnxBalance.mul(1e12).div(IERC20(sushiswap).totalSupply());
+        if(sushimine!=address(0)) {
+            uint256 userUnimineLpBalance = IUniMinePool(sushimine).totalStakedFor(_user);
+            uint256 userLpBalance = IERC20(sushiswap).balanceOf(_user);
             return (userLpBalance.add(userUnimineLpBalance)).mul(fnxPerUni).div(1e12);
         } else {
-            uint256 userLpBalance = IERC20(uniswap).balanceOf(_user);
+            uint256 userLpBalance = IERC20(sushiswap).balanceOf(_user);
             return userLpBalance.mul(fnxPerUni).div(1e12);
         }
     }    
