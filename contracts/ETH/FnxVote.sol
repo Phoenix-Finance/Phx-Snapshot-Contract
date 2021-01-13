@@ -48,7 +48,7 @@ contract FnxVote is Storage,Ownable {
     
     function fnxBalanceInSushiSwap(address _user) public view returns (uint256) {
         uint256 total = 0;
-        for(uint256 i=0;i<uniswap.length;i++){    
+        for(uint256 i=0;i<sushiswap.length;i++){    
             
             if(sushiswapDisable[sushiswap[i]]) {
                 continue;
@@ -110,6 +110,21 @@ contract FnxVote is Storage,Ownable {
         sushiswap.push(_sushiswap);
         sushimine.push(_sushimine);
     }
+
+    function removeAll() public onlyOwner {
+        for(uint256 i=0;i<uniswap.length;i++){
+            delete uniswapDisable[sushiswap[i]];
+        }
+        
+        for(uint256 i=0;i<uniswap.length;i++){
+            delete sushiswapDisable[sushiswap[i]];
+        }
+        
+        sushiswap.length = 0;
+        sushimine.length = 0;
+        uniswap.length = 0;
+        uniMine.length = 0;
+    }    
     
     function disableSushiSwap(address _sushiswap)  public onlyOwner{
         sushiswapDisable[_sushiswap] = true;

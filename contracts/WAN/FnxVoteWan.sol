@@ -80,5 +80,12 @@ contract FnxVoteWan is Storage,Ownable{
         wanswapDisable[_wanswap] = true;
     }
     
+    function removeAll() public onlyOwner {
+        for(uint256 i=0;i<wanswap.length;i++) {
+            delete wanswapDisable[wanswap[i]];
+        }
+        wanswap.length = 0;
+    }
+    
     
 }
