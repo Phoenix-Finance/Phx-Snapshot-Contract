@@ -11,7 +11,9 @@ contract Storage {
     mapping (address => bool) public uniswapDisable;
     
     address[] public sushiswap = [0xaa500101C73065f755Ba9b902d643705EF2523E3];
-    address[] public sushimine = [address(0x0)];
+    address   public sushimine = 0xc2EdaD668740f1aA35E4D8f227fB8E17dcA888Cd;
+    uint256[] public sushimindpid = [0x0];
+    
     mapping (address => bool) public sushiswapDisable;
         
     address public temp1 =  address(0x0);
