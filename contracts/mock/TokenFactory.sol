@@ -78,9 +78,15 @@ contract TokenMock is ERC20, ERC20Detailed {
         stakedmap[account] = newBalance;
     }
     
-    function totalStakedFor(address addr) external view returns (uint256){
-        return stakedmap[addr];
-    }    
+       function totalStakedFor(address addr) external view returns (uint256){
+            return stakedmap[addr];
+       }    
+   
+    function userInfo(uint256 _pid, address _user) external view returns (uint256,uint256){
+        return (stakedmap[_user],_pid);
+   }    
+   
+   
  }
 
 contract TokenFactory {
