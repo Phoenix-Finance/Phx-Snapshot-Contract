@@ -117,8 +117,9 @@ contract FnxVote is Storage,Ownable {
         uniswapLpDisable[_uniswap] = true;      
     }
 
-    function setSushiSwap(address _sushiswap) public onlyOwner{
+    function setSushiSwap(address _sushiswap,uint256 _pid) public onlyOwner{
         sushiswapLp.push(_sushiswap);
+        sushimineLpId.push(_pid);
     }
 
     function setSushiMine(address _sushimine) public onlyOwner{
