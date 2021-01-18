@@ -136,6 +136,8 @@ contract FnxVote is Storage,Ownable {
         }
         
         sushiswapLp.length = 0;
+        sushimineLpId.length = 0;
+        
         uniswapLp.length = 0;
         uniFnxMine.length = 0;
     }    
