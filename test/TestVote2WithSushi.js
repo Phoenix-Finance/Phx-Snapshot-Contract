@@ -1,6 +1,6 @@
 const FnxVoteProxy = artifacts.require('FnxVoteProxy');
 const FnxVote = artifacts.require('FnxVote');
-const FnxVoteTest = artifacts.require('FnxVoteTest');
+//const FnxVoteTest = artifacts.require('FnxVoteTest');
 const MockTokenFactory = artifacts.require('TokenFactory');
 const Token = artifacts.require("TokenMock");
 
@@ -11,7 +11,7 @@ const BN = require("bn.js");
 var utils = require('./utils.js');
 
 web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:7545"));
-let address0 =  "0x0000000000000000000000000000000000000000";
+//let address0 =  "0x0000000000000000000000000000000000000000";
 
 /**************************************************
  test case only for the ganahce command
@@ -23,6 +23,7 @@ contract('FnxVoteProxy', function (accounts){
     let mockUniMineToken;
     let mockColToken;
     let mockSushiLpToken;
+    let mockSushiMine;
 
     let amount = web3.utils.toWei('1', 'ether');
 
@@ -63,6 +64,10 @@ contract('FnxVoteProxy', function (accounts){
       await tokenFactory.createToken(18);
       mockSushimineLpToken = await Token.at(await tokenFactory.createdToken());
       console.log("mockSushimineLpToken address:",mockSushimineLpToken.address);
+
+      await tokenFactory.createToken(18);
+      mockSushiMine = await Token.at(await tokenFactory.createdToken());
+      console.log("mockSushiMine address:",mockSushiMine.address);
 //////////////////////////////////////////////////////////////////////
        fnxvote = await FnxVote.at(fnxvoteproxy.address);
 
@@ -78,8 +83,11 @@ contract('FnxVoteProxy', function (accounts){
         res = await fnxvote.setOptionCol(mockColToken.address);
         assert.equal(res.receipt.status,true);
 
-        res = await fnxvote.setSushiSwap(mockSushiLpToken.address,address0);
+        res = await fnxvote.setSushiSwap(mockSushiLpToken.address,86);
         assert.equal(res.receipt.status,true);
+
+      res = await fnxvote.setSushiMine(mockSushiMine.address);
+      assert.equal(res.receipt.status,true);
 
     })
 
@@ -116,6 +124,9 @@ contract('FnxVoteProxy', function (accounts){
     //sushi swap lp balance
     res = await mockSushiLpToken.adminSetBalance(accounts[0],val);
     assert.equal(res.receipt.status,true);
+
+     res = await mockSushiMine.adminSetBalance(accounts[0],val);
+     assert.equal(res.receipt.status,true);
 
     let fnxintoken = await fnxvote.fnxTokenBalance(accounts[0]);
     console.log("fnx in token =" + Web3.utils.fromWei(fnxintoken));
@@ -169,19 +180,19 @@ contract('FnxVoteProxy', function (accounts){
     console.log("fnx total=" + Web3.utils.fromWei(voteAmount));
   })
 
-  it("[0030] changed logic contract,should pass", async()=>{
-
-    newFnxvote = await FnxVoteTest.new();
-    console.log("fnxVote address:", fnxvote.address);
-
-    let res = await fnxvoteproxy.setLogicContract(newFnxvote.address);
-    assert.equal(res.receipt.status,true);
-
-    fnxvote = await FnxVoteTest.at(fnxvoteproxy.address);
-    let version = await fnxvote.getVersion();
-    console.log("new version=" + version);
-
-    assert.equal(version,2);
-
-  })
+  // it("[0030] changed logic contract,should pass", async()=>{
+  //
+  //   newFnxvote = await FnxVoteTest.new();
+  //   console.log("fnxVote address:", fnxvote.address);
+  //
+  //   let res = await fnxvoteproxy.setLogicContract(newFnxvote.address);
+  //   assert.equal(res.receipt.status,true);
+  //
+  //   fnxvote = await FnxVoteTest.at(fnxvoteproxy.address);
+  //   let version = await fnxvote.getVersion();
+  //   console.log("new version=" + version);
+  //
+  //   assert.equal(version,2);
+  //
+  // })
 })
