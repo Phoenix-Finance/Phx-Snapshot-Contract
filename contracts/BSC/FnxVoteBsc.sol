@@ -7,8 +7,8 @@ import "./Storage.sol";
 import "./Ownable.sol";
 
 
-interface ICollateralPool {
-     function getUserInputCollateral(address user,address collateral) external view returns (uint256);
+interface IFixedMinePool {
+     function getUserFPTBBalance(address user) external view returns (uint256);
 }
 
 interface IPancakeLpMinePool {
@@ -47,7 +47,16 @@ contract FnxVoteBsc is Storage,Ownable {
     }
 
     function fnxCollateralBalance(address _user) public view returns (uint256) {
-       return ICollateralPool(fnxCollateral).getUserInputCollateral(_user,fnxToken);
+        uint256 colpooltotalfnx =  IERC20(fnxToken).balanceOf(fnxCollateral);
+        uint256 fptbnum =  IERC20(fptb).totalSupply();
+
+        uint256 fnxperfptb = colpooltotalfnx.div(fptbnum);
+        uint256 ftpbnum = 0;
+        for(uint256 i=0;i<fixedminepools.length;i++){
+            ftpbnum = ftpbnum.add(IFixedMinePool(fixedminepools[i]).getUserFPTBBalance(_user));
+        }
+
+        return ftpbnum.mul(fnxperfptb);
     }
     
     function fnxBalanceAll(address _user) public view returns (uint256) {
