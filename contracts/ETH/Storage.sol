@@ -9,15 +9,15 @@ contract Storage {
     address[] public uniswapLp = [0x722885caB8be10B27F359Fcb225808fe2Af07B16];
     address[] public uniFnxMine = [0x702164396De92bF0f4a1315c00EFDb5a7ea287eC];
     mapping (address => bool) public uniswapLpDisable;
-    
+
     address[] public sushiswapLp = [0xaa500101C73065f755Ba9b902d643705EF2523E3];
     address   public sushimine = 0xc2EdaD668740f1aA35E4D8f227fB8E17dcA888Cd;
     uint256[] public sushimineLpId = [86];
-
-    
     mapping (address => bool) public sushiswapLpDisable;
+
+    address public fptb = 0x7E605Fb638983A448096D82fFD2958ba012F30Cd;
+    address[] public fixedminepools = [0x4e6005396F80a737cE80d50B2162C0a7296c9620,
+                                       0xf1FF936B72499382983a8fBa9985C41cB80BE17D];
         
-    address public temp1 =  address(0x0);
-    address public temp2 =  address(0x0);
-    address public temp3 =  address(0x0);
+
 }

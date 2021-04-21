@@ -1,0 +1,92 @@
+{
+	"compiler": {
+		"version": "0.5.16+commit.9c3226ce"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "user",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "collateral",
+						"type": "address"
+					}
+				],
+				"name": "getUserInputCollateral",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"methods": {}
+		},
+		"userdoc": {
+			"methods": {}
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"localhost/ETH/FnxVote.sol": "ICollateralPool"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"localhost/ETH/FnxVote.sol": {
+			"keccak256": "0x9751a441485d3040e8459fa360c1f2df68b75964020d4c9cae511a6556af4c94",
+			"urls": [
+				"bzz-raw://aa36d8c854a9ba1caf6d34eb59fb06d84c03f6a89bf1ce0366d0836e249b6bf4",
+				"dweb:/ipfs/QmS6R31TFNyH3ohn7qs1LiJ7UAXWvxPRegmmAbVkHovmT9"
+			]
+		},
+		"localhost/ETH/IERC20.sol": {
+			"keccak256": "0x5e3569c3a8e903ee15b38511ade15fff1ddc56fcb5bd9049864401d21166c52e",
+			"urls": [
+				"bzz-raw://ea8bf25929d7222578d8d24b33f3d3b7b27d6cdfd2c452b6110d5f50fcc3d52a",
+				"dweb:/ipfs/QmVt4voQ3UgAzfxnrDxyp9BBCBhpCpmJyibnWcE2M5eaaN"
+			]
+		},
+		"localhost/ETH/Ownable.sol": {
+			"keccak256": "0x283d39388b6a114767746e38a205a4bfaaeb401c4863a7eb17fa107684d7845b",
+			"urls": [
+				"bzz-raw://716829652ea09ecaf4fca47af0d4edb145db6f25548c0710ccb83f39e4b9bea8",
+				"dweb:/ipfs/QmWDKty8932txnmo4JLiCVfvDHyLqHik2W1NYeXBFQMzYs"
+			]
+		},
+		"localhost/ETH/SafeMath.sol": {
+			"keccak256": "0xc6c5e898a7df7ca7d494cd1103bb473bceba3acd8c9c97a20e8a6baa8f28570b",
+			"urls": [
+				"bzz-raw://c9f0bb71c9e24e6dbbd43ed84ef545a5a627b3f6a16fad4b7f7700d56bd1a4c7",
+				"dweb:/ipfs/QmYvA4BVrYaxrD6qp49EETQn7z8s5CE7LoewfNWFPvBv3c"
+			]
+		},
+		"localhost/ETH/Storage.sol": {
+			"keccak256": "0x596ded7048505606ca856aa935088966fc91ff0337a7a5da9d4c5896751f2635",
+			"urls": [
+				"bzz-raw://c5b51c55ee4c985df0c27e298e62d3c5145459408c6d30413b7ed8df07837d55",
+				"dweb:/ipfs/Qmd2xz4SspMcxU9df3iURPxEnJ64eE2msScE9oxRNTnNmQ"
+			]
+		}
+	},
+	"version": 1
+}

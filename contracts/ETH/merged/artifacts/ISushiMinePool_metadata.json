@@ -1,0 +1,69 @@
+{
+	"compiler": {
+		"version": "0.5.16+commit.9c3226ce"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"constant": true,
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "pid",
+						"type": "uint256"
+					},
+					{
+						"internalType": "address",
+						"name": "addr",
+						"type": "address"
+					}
+				],
+				"name": "userInfo",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"payable": false,
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"methods": {}
+		},
+		"userdoc": {
+			"methods": {}
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"localhost/ETH/merged/FnxVoteMegered.sol": "ISushiMinePool"
+		},
+		"evmVersion": "istanbul",
+		"libraries": {},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"localhost/ETH/merged/FnxVoteMegered.sol": {
+			"keccak256": "0x6cd480455d5726d774c8d84438ab36988634cb04c08aea6eb5450261a94ad13a",
+			"urls": [
+				"bzz-raw://5237ef877a126774c549430d47ac95dade23f3811c93a7228f1b992bc363f38b",
+				"dweb:/ipfs/QmQqvTkQy8QRVRx515Zf5r7DAvsbpDcy1uY8y1DRWeSDVm"
+			]
+		}
+	},
+	"version": 1
+}

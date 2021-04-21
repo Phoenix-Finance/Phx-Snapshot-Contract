@@ -84,6 +84,16 @@ contract FnxVoteBsc is Storage,Ownable {
         pancakeLpDisable[_pancakeswap] = true;
     }
 
+    function removeFixedMinePool(address _fixedMine) public onlyOwner{
+        for(uint256 i=0;i<fixedminepools.length;i++){
+            if(fixedminepools[i]==_fixedMine) {
+                fixedminepools[i] = fixedminepools[fixedminepools.length-1];
+                fixedminepools.length--;
+                break;
+            }
+        }
+    }
+
     function removeAll() public onlyOwner {
         for(uint256 i=0;i<pancakeswapLp.length;i++){
             delete pancakeLpDisable[pancakeswapLp[i]];

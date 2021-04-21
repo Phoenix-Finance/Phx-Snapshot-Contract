@@ -6,6 +6,9 @@ import "./IERC20.sol";
 import "./Storage.sol";
 import "./Ownable.sol";
 
+interface IFixedMinePool {
+    function getUserFPTBBalance(address user) external view returns (uint256);
+}
 
 interface ICollateralPool {
      function getUserInputCollateral(address user,address collateral) external view returns (uint256);
@@ -86,7 +89,19 @@ contract FnxVote is Storage,Ownable {
     }    
 
     function fnxCollateralBalance(address _user) public view returns (uint256) {
-       return ICollateralPool(fnxCollateral).getUserInputCollateral(_user,fnxToken);
+
+        uint256 colpooltotalfnx =  IERC20(fnxToken).balanceOf(fnxCollateral);
+        uint256 fptbnum =  IERC20(fptb).totalSupply();
+
+        uint256 fnxperfptb = colpooltotalfnx.div(fptbnum);
+        uint256 ftpbnum = 0;
+        for(uint256 i=0;i<fixedminepools.length;i++){
+            ftpbnum = ftpbnum.add(IFixedMinePool(fixedminepools[i]).getUserFPTBBalance(_user));
+        }
+
+        return ftpbnum.mul(fnxperfptb);
+
+      // return ICollateralPool(fnxCollateral).getUserInputCollateral(_user,fnxToken);
     }
     
     function fnxBalanceAll(address _user) public view returns (uint256) {
@@ -140,10 +155,25 @@ contract FnxVote is Storage,Ownable {
         
         uniswapLp.length = 0;
         uniFnxMine.length = 0;
+        fixedminepools.length = 0;
     }    
     
     function disableSushiSwap(address _sushiswap)  public onlyOwner{
         sushiswapLpDisable[_sushiswap] = true;
+    }
+
+    function addFixedMinePool(address _fixedMine) public onlyOwner{
+        fixedminepools.push(_fixedMine);
+    }
+
+    function removeFixedMinePool(address _fixedMine) public onlyOwner{
+        for(uint256 i=0;i<fixedminepools.length;i++){
+            if(fixedminepools[i]==_fixedMine) {
+                fixedminepools[i] = fixedminepools[fixedminepools.length-1];
+                fixedminepools.length--;
+                break;
+            }
+        }
     }
 
     function getVersion() public pure returns (uint256)  {
