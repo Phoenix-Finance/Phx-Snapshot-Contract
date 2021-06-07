@@ -18,6 +18,5 @@ contract Storage {
     address public fptb = 0x7E605Fb638983A448096D82fFD2958ba012F30Cd;
     address[] public fixedminepools = [0x4e6005396F80a737cE80d50B2162C0a7296c9620,
                                        0xf1FF936B72499382983a8fBa9985C41cB80BE17D];
-        
 
 }
