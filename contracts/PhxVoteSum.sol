@@ -28,7 +28,7 @@ contract PhxVoteSum is Ownable {
         phxsource.push(_phxsrc);
     }
 
-    function pnxBalanceAll(address _user) public view returns (uint256) {
+    function phxBalanceAll(address _user) public view returns (uint256) {
         uint256 totalphx = 0;
         for(uint256 i=0;i<phxsource.length;i++){
             totalphx = totalphx + Iphxsrc(phxsource[i]).getUserPhxBalance(_user);
