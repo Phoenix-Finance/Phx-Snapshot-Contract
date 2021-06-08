@@ -5,6 +5,7 @@ import "./SafeMath.sol";
 interface Iphxsrc {
     function getUserPhxBalance(address user) external view returns (uint256);
 }
+
 contract PhxVoteSum is Ownable {
 
     using SafeMath for uint256;
